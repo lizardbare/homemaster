@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Image Slideshow</title>
+  <title>Interactive Slideshow</title>
   <style>
     body {
       margin: 0;
@@ -12,6 +12,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
     }
     img {
       max-width: 100%;
@@ -19,6 +20,7 @@
       opacity: 0;
       position: absolute;
       transition: opacity 1s ease-in-out;
+      cursor: pointer;
     }
     img.active {
       opacity: 1;
@@ -33,12 +35,29 @@
   <script>
     const images = document.querySelectorAll('img');
     let current = 0;
+    let timer;
 
-    setInterval(() => {
+    function showNextImage() {
       images[current].classList.remove('active');
       current = (current + 1) % images.length;
       images[current].classList.add('active');
-    }, 5000);
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = setInterval(showNextImage, 5000);
+    }
+
+    // Auto rotate
+    timer = setInterval(showNextImage, 5000);
+
+    // Click to skip
+    images.forEach(img => {
+      img.addEventListener('click', () => {
+        showNextImage();
+        resetTimer();
+      });
+    });
   </script>
 </body>
 </html>
